@@ -26,7 +26,7 @@ $messages = file($filename, FILE_IGNORE_NEW_LINES) ;
     <button>Post</button>
     <input type = "hidden" name = "token" value = "<?= h($_SESSION['token']) ; ?>">
 </form>
-  
+
 </body>
 
 <?php
