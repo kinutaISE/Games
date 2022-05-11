@@ -14,12 +14,16 @@ function createToken()
 function validateToken()
 {
   $token = filter_input(INPUT_POST, 'token') ;
-  printf( nl2br("Your Token: %d / Session Token: %d" . PHP_EOL) , $token, $_SESSION['token']) ;
   if (
     empty($_SESSION['token']) ||
     $_SESSION['token'] !== $token
-  )
-    exit('Invalid Token!') ;
+  ) {
+    printf( nl2br("%d" . PHP_EOL), $_SESSION['token'] !== $token) ;
+    // printf( nl2br("Your Token: %d / Session Token: %d" . PHP_EOL) , $token, $_SESSION['token']) ;
+    echo "SESSION: " . nl2br($_SESSION['token'] . PHP_EOL) ;
+    echo "POST: " . nl2br($token . PHP_EOL)  ;
+    exit('Invalid Post !') ;
+  }
 }
 
 session_start() ;
