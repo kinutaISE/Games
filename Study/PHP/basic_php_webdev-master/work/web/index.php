@@ -4,14 +4,11 @@ require('../app/functions.php') ;
 
 createToken() ;
 
-const FILENAME = '../app/messages.txt' ;
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   validateToken() ;
 
   $message = trim( filter_input(INPUT_POST, 'message') ) ;
   $message = $message ? $message : '...' ;
-
   $fp = fopen(FILENAME, 'a') ;
   fwrite($fp, $message . PHP_EOL) ;
   fclose($fp) ;
@@ -20,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   exit ;
 }
 
+const FILENAME = '../app/messages.txt' ;
 $messages = file(FILENAME, FILE_IGNORE_NEW_LINES) ;
 
 include('../app/_parts/_header.php') ;
