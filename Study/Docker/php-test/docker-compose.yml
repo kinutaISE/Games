@@ -1,7 +1,7 @@
 version: '3'
 services:
   nginx:
-    image: nginx.latest
+    image: nginx:latest
     ports:
       - 8080:80
     volumes:
@@ -25,6 +25,9 @@ services:
       - ./mysql/data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: dbsql
+      MY_SQL_USER: dbuser
+      MY_SQL_PASSWORD: dbpass
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
