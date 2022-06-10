@@ -10,5 +10,6 @@ session_start() ;
 
 <head>
   <meta charset="UTF-8" />
-  <title>future design</title>
+  <title>Future Design</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
