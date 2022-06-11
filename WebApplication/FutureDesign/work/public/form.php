@@ -147,7 +147,6 @@ $cost_items = $stmt->fetchAll() ;
 
 </body>
 
-
 <?php
 
 include('_parts/_footer.php') ;
