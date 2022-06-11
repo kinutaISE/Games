@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS prefectures ;
 CREATE TABLE prefectures(
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,
-  PRIMARY KEY (id) ;
+  PRIMARY KEY (id)
 ) ;
 
 DROP TABLE IF EXISTS cost_items ;
@@ -22,8 +22,5 @@ CREATE TABLE cost_items(
   name VARCHAR(255) NOT NULL,
   value INT NOT NULL,
   user_id VARCHAR(255) NOT NULL,
-  PRIMARY KEY (id) ;
+  PRIMARY KEY (id)
 ) ;
-
-INSERT INTO users (id, password) VALUES ('acig77', 'pass') ;
-SELECT * FROM users ;

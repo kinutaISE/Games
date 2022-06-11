@@ -15,7 +15,7 @@ $income = filter_input(INPUT_POST, 'income') ;
 <body>
   <p>手取り：<?= number_format( IncomeCalculator::calc_residual($income, $anual_income_type) ) ;?>円 </p>
 
-  <p><a href="index.php">戻る</a></p>
+  <p><a href="form.php">戻る</a></p>
 </body>
 
 <?php

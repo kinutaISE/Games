@@ -23,19 +23,21 @@ catch (PDOException $e) {
   exit ;
 }
 
-function add_cost_item()
+function add_cost_item($pdo)
 {
   // データベースに保持する
-  $stmt = $pdo->prepare("
-    INSERT INTO cost_items (name, value)
-    VALUES (:name, :value)
-  ") ;
-  $name = trim( filter_input(INPUT_POST, 'const_item_name') ) ;
+  $name = trim( filter_input(INPUT_POST, 'cost_item_name') ) ;
   $value = trim( filter_input(INPUT_POST, 'cost_item_value') ) ;
+  $user_id = $_SESSION['user_id'] ;
   if ($name === '' || $value === '')
     return ;
-  $stmt->bindValue('name', $name, PDO::PRAM_STR) ;
+  $stmt = $pdo->prepare("
+    INSERT INTO cost_items (name, value, user_id)
+    VALUES (:name, :value, :user_id)
+  ") ;
+  $stmt->bindValue('name', $name, PDO::PARAM_STR) ;
   $stmt->bindValue('value', $value, PDO::PARAM_INT) ;
+  $stmt->bindValue('user_id', $user_id, PDO::PARAM_STR) ;
   $stmt->execute() ;
 
   /* セッションによって保持する
@@ -46,13 +48,13 @@ function add_cost_item()
   */
 }
 
-function delete_cost_item()
+function delete_cost_item($pdo)
 {
   // データベースから削除する
   $stmt = $pdo->prepare("
     DELETE FROM cost_items WHERE id = :id
   ") ;
-  $id = filter_input(INPUT_POST, 'id') ;
+  $id = filter_input(INPUT_POST, 'cost_item_id') ;
   $stmt->bindParam('id', $id);
   $stmt->execute() ;
   /* セッションから削除する
@@ -67,15 +69,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $action = filter_input(INPUT_GET, 'action') ;
   switch ($action) {
     case 'add':
-      add_cost_item() ;
+      add_cost_item($pdo) ;
       break ;
     case 'delete':
-      delete_cost_item() ;
+      delete_cost_item($pdo) ;
       break ;
     default:
       exit('Invalid post request!!') ;
   }
 }
+
+$stmt = $pdo->prepare("SELECT * FROM cost_items WHERE user_id = :user_id") ;
+$stmt->bindValue(':user_id', $user_id) ;
+$stmt->execute() ;
+$cost_items = $stmt->fetchAll() ;
 
 ?>
 
@@ -127,11 +134,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <button>Add</button>
   </form>
   <ul>
-  <?php foreach ($_SESSION['cost'] as $cost_key => $cost_value):?>
+  <?php foreach ($cost_items as $cost_item):?>
     <li>
-      <?= $cost_key . ' : ' . number_format($cost_value) . '円' ; ?>
+      <?= $cost_item->name . ' : ' . number_format($cost_item->value) . '円' ; ?>
       <form method="post" action="?action=delete">
-        <input type="hidden" name="cost_item_name" value="<?= $cost_key ; ?>">
+        <input type="hidden" name="cost_item_id" value="<?= $cost_item->id ; ?>">
         <button>削除</button>
       </form>
     </li>
