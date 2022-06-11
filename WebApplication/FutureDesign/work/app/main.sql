@@ -4,7 +4,7 @@ CREATE TABLE users(
   password VARCHAR(255) NOT NULL,
   age INT,
   prefecture_id INT,
-  income_value INT,
+  income INT,
   partner_id INT,
   PRIMARY KEY (id)
 ) ;

@@ -1,7 +1,8 @@
 <?php
 
+require_once('../app/config.php') ;
+
 include('_parts/_header.php') ;
-require('IncomeCalculator.php') ;
 
 $user_name = filter_input(INPUT_POST, 'user_name') ;
 $user_age = filter_input(INPUT_POST, 'user_age') ;
