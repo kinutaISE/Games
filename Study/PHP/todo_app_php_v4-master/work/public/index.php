@@ -2,36 +2,20 @@
 
 require_once(__DIR__ . '/../app/config.php') ;
 
-Token::create() ;
+use MyApp\Database ;
+use MyApp\Utils ;
+use MyApp\Todo ;
 
 $pdo = Database::getInstance() ;
 
 define('SITE_URL', 'http://' . $_SERVER['HTTP_HOST']) ;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  Token::validate() ;
-
-  // ここを INPUT_POST にすると、チェックボックスが更新されない
-  $action = filter_input(INPUT_GET, 'action') ;
-
-  switch ($action) {
-    case 'add':
-      addTodo($pdo) ;
-      break ;
-    case 'toggle':
-      toggleTodo($pdo) ;
-      break ;
-    case 'delete':
-      deleteTodo($pdo) ;
-      break ;
-    default:
-      exit ;
-  }
-  header('Location: ' . SITE_URL) ;
-  exit ;
-}
-
-$todos = getTodos($pdo) ;
+// Todo オブジェクトの取得
+$todo = new Todo($pdo) ;
+// ポストの処理
+$todo->processPost() ;
+// 全ての todo の取得
+$todos = $todo->getAll() ;
 
 ?>
 
@@ -47,7 +31,14 @@ $todos = getTodos($pdo) ;
 
 <body>
   <main>
-  	<h1>Todos</h1>
+
+    <header>
+      <h1>Todos</h1>
+      <form action="?action=purge" method="post">
+        <span class="purge">Purge</span>
+        <input type="hidden" name="token" value="<?= Utils::h($_SESSION['token']) ;?>">
+      </form>
+    </header>
 
     <form action="?action=add" method="post">
       <input type="text" name="content" placeholder="Type a new todo.">
